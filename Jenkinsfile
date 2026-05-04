@@ -22,4 +22,26 @@ pipeline {
             }
         }
     }
+
+    post {
+        success {
+            withCredentials([string(credentialsId: 'slack-webhook-url', variable: 'SLACK_WEBHOOK')]) {
+                sh '''
+                curl -X POST -H 'Content-type: application/json' \
+                --data '{"text":"✅ Jenkins Build Successful: insured-assurance-deploy"}' \
+                $SLACK_WEBHOOK
+                '''
+            }
+        }
+
+        failure {
+            withCredentials([string(credentialsId: 'slack-webhook-url', variable: 'SLACK_WEBHOOK')]) {
+                sh '''
+                curl -X POST -H 'Content-type: application/json' \
+                --data '{"text":"❌ Jenkins Build Failed: insured-assurance-deploy"}' \
+                $SLACK_WEBHOOK
+                '''
+            }
+        }
+    }
 }
