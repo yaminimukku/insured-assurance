@@ -1,0 +1,57 @@
+---
+- name: Configure Royal Hotel Developer VM
+  hosts: dev
+  become: yes
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install developer tools
+      apt:
+        name:
+          - git
+          - vim
+          - curl
+          - wget
+          - unzip
+          - python3
+          - python3-pip
+          - openjdk-17-jdk
+          - docker.io
+          - nginx
+        state: present
+
+    - name: Start and enable Docker
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Start and enable Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Add ubuntu user to docker group
+      user:
+        name: ubuntu
+        groups: docker
+        append: yes
+
+    - name: Create project directory
+      file:
+        path: /home/ubuntu/royalhotel-dev
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+
+    - name: Create Nginx welcome page
+      copy:
+        dest: /var/www/html/index.html
+        content: |
+          <h1>Royal Hotel Developer VM</h1>
+          <p>Provisioned using Terraform and configured using Ansible.</p>
