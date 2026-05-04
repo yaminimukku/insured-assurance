@@ -2,3 +2,9 @@ target/
 *.war
 *.class
 *.log
+.terraform/
+*.tfstate
+*.tfstate.backup
+terraform.tfvars
+*.pem
+node_modules/
