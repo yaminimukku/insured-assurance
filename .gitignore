@@ -8,3 +8,5 @@ target/
 terraform.tfvars
 *.pem
 node_modules/
+terraform/aws/
+terraform/awscliv2.zip
